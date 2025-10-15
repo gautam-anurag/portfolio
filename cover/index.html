@@ -205,6 +205,11 @@
             color: var(--text-primary);
         }
 
+        h3 a{
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
         .item-info p {
             font-size: 1rem;
             color: var(--text-secondary);
@@ -329,7 +334,14 @@
         /* Contact Form */
         .contact {
             padding: 6rem 5% 4rem;
-            background-color: var(--secondary-bg);
+            /* background-color: var(--secondary-bg); */
+            background-color: var(--primary-bg);
+            
+            min-height: calc(100vh - 5rem);
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .contact-title {
@@ -450,6 +462,12 @@
             }
         }
 
+        @media (max-width: 768px) {
+            header {
+                padding: 8px 5%;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -465,14 +483,18 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <h2>Capturing the Details</h2>
-                <p>Ready for brand collaborations.</p>
+                <!-- <h2>Capturing the Details</h2> -->
+                <h2>Project_Cover</h2>
+                <!-- <p>Ready for brand collaborations.</p> -->
+                <!-- <p>Portfolio for brand collaborations.</p> -->
+                <p>Capturing the Details</p>
             </div>
         </section>
 
         <!-- Portfolio Gallery -->
         <section class="portfolio">
-            <h2 class="portfolio-title">The Collection</h2>
+            <!-- <h2 class="portfolio-title">The Collection</h2> -->
+            <h2 class="portfolio-title">Portfolio</h2>
             <div class="portfolio-grid">
                 <!-- Item 1: 11zeros Corrugated -->
                 <div class="portfolio-item" data-title="11zeros - Corrugated" data-images="11zeros-Corrugated_1.jpg,11zeros-Corrugated_2.jpg">
@@ -482,7 +504,9 @@
                         <img src="11zeros-Corrugated_2.jpg" alt="11zeros Corrugated Case - View 2">
                     </div>
                     <div class="item-info">
-                        <h3>11zeros - Corrugated</h3>
+                        <h3>
+                            <a href="https://11zeros.com/products/corrugated-pc-case?variant=49534106206514">11zeros - Corrugated</a>
+                        </h3>
                         <p>A bold design with a textured, industrial feel and striking orange accents.</p>
                         <button class="view-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -499,7 +523,9 @@
                         <img src="CASEOLOGY-Nano-Pop_2.jpg" alt="Caseology Nano Pop - View 2">
                     </div>
                     <div class="item-info">
-                        <h3>Caseology - Nano Pop</h3>
+                        <h3>
+                            <a href="https://www.spigen.com/pages/caseology">Caseology - Nano Pop</a>
+                        </h3>
                         <p>Minimalist and sleek with a smooth matte finish and a contrasting camera ring.</p>
                         <button class="view-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -507,25 +533,8 @@
                         </button>
                     </div>
                 </div>
-                
-                <!-- Item 3: Casesily Carbon Fiber -->
-                <div class="portfolio-item" data-title="Casesily - Carbon Fiber" data-images="Casesily-Carbon-Fiber_1.jpg,Casesily-Carbon-Fiber_2.jpg">
-                    <div class="image-container">
-                        <div class="loader"></div>
-                        <img src="Casesily-Carbon-Fiber_1.jpg" alt="Casesily Carbon Fiber - View 1">
-                        <img src="Casesily-Carbon-Fiber_2.jpg" alt="Casesily Carbon Fiber - View 2">
-                    </div>
-                    <div class="item-info">
-                        <h3>Casesily - Carbon Fiber</h3>
-                        <p>A classic, sophisticated look featuring a carbon fiber pattern with a central racing stripe.</p>
-                        <button class="view-btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            <span>View Gallery</span>
-                        </button>
-                    </div>
-                </div>
 
-                <!-- Item 4: Spigen Liquid Air -->
+                <!-- Item 3: Spigen Liquid Air -->
                 <div class="portfolio-item" data-title="Spigen - Liquid Air" data-images="Spigen-Liquid-Air_1.jpg,Spigen-LiquidAir_2.jpg">
                     <div class="image-container">
                         <div class="loader"></div>
@@ -533,8 +542,29 @@
                         <img src="Spigen-LiquidAir_2.jpg" alt="Spigen Liquid Air - View 2">
                     </div>
                     <div class="item-info">
-                        <h3>Spigen - Liquid Air</h3>
+                        <h3>
+                            <a href="https://spigen.in/products/galaxy-s23-series-case-liquid-air?srsltid=AfmBOorxYwRRTeCnMvFuPL9RhMHXksBsVRBD3q1ZVvMSakO_1HeR1j-Y">Spigen - Liquid Air</a>
+                        </h3>
                         <p>A slim, form-fitted case with a modern geometric pattern for enhanced grip and style.</p>
+                        <button class="view-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <span>View Gallery</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item 4: Casesily Carbon Fiber -->
+                <div class="portfolio-item" data-title="Casesily - Carbon Fiber" data-images="Casesily-Carbon-Fiber_1.jpg,Casesily-Carbon-Fiber_2.jpg">
+                    <div class="image-container">
+                        <div class="loader"></div>
+                        <img src="Casesily-Carbon-Fiber_1.jpg" alt="Casesily Carbon Fiber - View 1">
+                        <img src="Casesily-Carbon-Fiber_2.jpg" alt="Casesily Carbon Fiber - View 2">
+                    </div>
+                    <div class="item-info">
+                        <h3>
+                            <a href="https://www.casesily.com/products/samsung-galaxy-s23-ultra-daul-shade-carbon-fiber-aramid-kevilar-case?_pos=45&_sid=83ac895a7&_ss=r">Casesily - Carbon Fiber</a>
+                        </h3>
+                        <p>A classic, sophisticated look featuring a carbon fiber pattern with a central racing stripe.</p>
                         <button class="view-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                             <span>View Gallery</span>
@@ -565,7 +595,7 @@
                     <label for="project-details">Your Grand Plan (Tell me about the case that will change the world)</label>
                     <textarea id="project-details" name="projectDetails" required></textarea>
                 </div>
-                <button type="submit" class="submit-btn" id="submit-button">Launch Collaboration</button>
+                <button type="submit" class="submit-btn" id="submit-button">Let's Collaborate</button>
                 <div id="form-messages"></div>
             </form>
         </section>
@@ -771,6 +801,3 @@
 
 </body>
 </html>
-
-
-
