@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset and Basic Setup */
+        :root {
+            --primary-bg: #101010;
+            --secondary-bg: #1e1e1e;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4a90e2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            /* padding: 1.5rem 5%; */
+            padding: 1rem 5%;
+            background-color: rgba(16, 16, 16, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            /* border-bottom: 1px solid #2a2a2a; */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav h1 {
+            /* font-size: 1.5rem; */
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            background-image: url('cover-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+        }
+
+        .hero-content {
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .hero-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+        }
+
+        /* Portfolio Gallery */
+        .portfolio {
+            padding: 6rem 5%;
+        }
+
+        .portfolio-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            font-weight: 700;
+        }
+
+        .portfolio-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .portfolio-item {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0; /* Initially hidden for animation */
+            transform: translateY(30px); /* Start slightly lower for animation */
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 400px; /* Flex properties for responsive wrapping */
+            max-width: 450px; /* Prevent items from becoming too wide */
+        }
+        
+        .portfolio-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+            /* box-shadow: 0 12px 30px rgba(74, 144, 226, 0.2); */
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .image-container::before {
+            content: '';
+            display: block;
+            padding-top: 133.33%; /* Correct 4:3 aspect ratio for 1200x1600 images */
+        }
+
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the container without stretching */
+            display: block;
+            transition: opacity 0.8s ease-in-out; /* Smooth fade for slideshow */
+        }
+        
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-left-color: var(--accent-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            z-index: 10;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .item-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .item-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .item-info p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .view-btn {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+            /* transform: scale(1.02); */
+        }
+
+        /* Modal / Lightbox */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 90%;
+            max-width: 600px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-60%); opacity: 0; }
+            to { transform: translateY(-50%); opacity: 1; }
+        }
+
+        .modal-image {
+            width: 100%;
+            border-radius: 8px;
+            transition: opacity 0.4s ease;
+        }
+
+        .close-btn, .prev-btn, .next-btn {
+            cursor: pointer;
+            position: absolute;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s ease;
+            user-select: none;
+        }
+
+        .close-btn {
+            top: 15px;
+            right: 35px;
+            font-size: 40px;
+            z-index: 1001;
+        }
+
+        .prev-btn, .next-btn {
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            padding: 16px;
+            background-color: rgba(0,0,0,0.4);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev-btn {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        
+        .prev-btn:hover, .next-btn:hover, .close-btn:hover {
+            color: var(--text-secondary);
+        }
+
+        #caption {
+            text-align: center;
+            color: var(--text-primary);
+            padding-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 300;
+            transition: opacity 0.4s ease;
+        }
+        
+        /* Contact Form */
+        .contact {
+            padding: 6rem 5% 4rem;
+            background-color: var(--secondary-bg);
+        }
+
+        .contact-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .contact-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+
+        .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background-color: #101010;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            /* box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3); */
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #3a80d2;
+            /* transform: scale(1.02); */
+        }
+
+        .submit-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        
+        #form-messages {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+        
+        #form-messages.success {
+            color: #4CAF50;
+        }
+
+        #form-messages.error {
+            color: #F44336;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            background-color: #0a0a0a;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .hero-content h2 {
+                font-size: 4.5rem;
+            }
+
+            .modal-content {
+                max-width: 800px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <h1>Anurag Gautam</h1>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Capturing the Details</h2>
+                <p>Ready for brand collaborations.</p>
+            </div>
+        </section>
+
+        <!-- Portfolio Gallery -->
+        <section class="portfolio">
+            <h2 class="portfolio-title">The Collection</h2>
+            <div class="portfolio-grid">
+                <!-- Item 1: 11zeros Corrugated -->
+                <div class="portfolio-item" data-title="11zeros - Corrugated" data-images="11zeros-Corrugated_1.jpg,11zeros-Corrugated_2.jpg">
+                    <div class="image-container">
+                        <div class="loader"></div>
+                        <img src="11zeros-Corrugated_1.jpg" alt="11zeros Corrugated Case - View 1">
+                        <img src="11zeros-Corrugated_2.jpg" alt="11zeros Corrugated Case - View 2">
+                    </div>
+                    <div class="item-info">
+                        <h3>11zeros - Corrugated</h3>
+                        <p>A bold design with a textured, industrial feel and striking orange accents.</p>
+                        <button class="view-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <span>View Gallery</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 2: Caseology Nano Pop -->
+                <div class="portfolio-item" data-title="Caseology - Nano Pop" data-images="CASEOLOGY-Nano-Pop_1.jpg,CASEOLOGY-Nano-Pop_2.jpg">
+                    <div class="image-container">
+                        <div class="loader"></div>
+                        <img src="CASEOLOGY-Nano-Pop_1.jpg" alt="Caseology Nano Pop - View 1">
+                        <img src="CASEOLOGY-Nano-Pop_2.jpg" alt="Caseology Nano Pop - View 2">
+                    </div>
+                    <div class="item-info">
+                        <h3>Caseology - Nano Pop</h3>
+                        <p>Minimalist and sleek with a smooth matte finish and a contrasting camera ring.</p>
+                        <button class="view-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <span>View Gallery</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item 3: Casesily Carbon Fiber -->
+                <div class="portfolio-item" data-title="Casesily - Carbon Fiber" data-images="Casesily-Carbon-Fiber_1.jpg,Casesily-Carbon-Fiber_2.jpg">
+                    <div class="image-container">
+                        <div class="loader"></div>
+                        <img src="Casesily-Carbon-Fiber_1.jpg" alt="Casesily Carbon Fiber - View 1">
+                        <img src="Casesily-Carbon-Fiber_2.jpg" alt="Casesily Carbon Fiber - View 2">
+                    </div>
+                    <div class="item-info">
+                        <h3>Casesily - Carbon Fiber</h3>
+                        <p>A classic, sophisticated look featuring a carbon fiber pattern with a central racing stripe.</p>
+                        <button class="view-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <span>View Gallery</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 4: Spigen Liquid Air -->
+                <div class="portfolio-item" data-title="Spigen - Liquid Air" data-images="Spigen-Liquid-Air_1.jpg,Spigen-LiquidAir_2.jpg">
+                    <div class="image-container">
+                        <div class="loader"></div>
+                        <img src="Spigen-Liquid-Air_1.jpg" alt="Spigen Liquid Air - View 1">
+                        <img src="Spigen-LiquidAir_2.jpg" alt="Spigen Liquid Air - View 2">
+                    </div>
+                    <div class="item-info">
+                        <h3>Spigen - Liquid Air</h3>
+                        <p>A slim, form-fitted case with a modern geometric pattern for enhanced grip and style.</p>
+                        <button class="view-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <span>View Gallery</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact">
+            <h2 class="contact-title">Let's Collaborate</h2>
+            <p class="contact-subtitle">Got a case that needs its superhero moment? Drop a line. My camera is ready for its close-up, even if your case is shy.</p>
+            <form class="contact-form" id="contact-form">
+                <div class="form-group">
+                    <label for="brand-name">Your Brand's Name (The one the legends speak of)</label>
+                    <input type="text" id="brand-name" name="brandName" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-name">Your Name (The Hero behind the Brand)</label>
+                    <input type="text" id="contact-name" name="contactName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Your Email (For top-secret communications)</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="project-details">Your Grand Plan (Tell me about the case that will change the world)</label>
+                    <textarea id="project-details" name="projectDetails" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="submit-button">Launch Collaboration</button>
+                <div id="form-messages"></div>
+            </form>
+        </section>
+    </main>
+    
+    <!-- Modal / Lightbox -->
+    <div id="imageModal" class="modal">
+        <span class="close-btn">&times;</span>
+        <span class="prev-btn">&#10094;</span>
+        <span class="next-btn">&#10095;</span>
+        <div class="modal-content">
+            <div class="loader modal-loader"></div>
+            <img class="modal-image" id="modalImage">
+            <div id="caption"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Website by Anurag Gautam</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Intersection Observer for fade-in
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            portfolioItems.forEach(item => {
+                observer.observe(item);
+            });
+
+            // Card Image Loading and Slideshow Logic
+            document.querySelectorAll('.portfolio-item').forEach(item => {
+                const imageContainer = item.querySelector('.image-container');
+                if (!imageContainer) return;
+
+                const loader = imageContainer.querySelector('.loader');
+                const images = imageContainer.querySelectorAll('img');
+                if (images.length === 0) {
+                    if(loader) loader.style.display = 'none';
+                    return;
+                }
+
+                // Initially hide all images
+                images.forEach(img => img.style.opacity = '0');
+
+                const promises = Array.from(images).map(img => {
+                    return new Promise((resolve, reject) => {
+                        if (img.complete) {
+                            resolve();
+                        } else {
+                            img.onload = resolve;
+                            img.onerror = reject;
+                        }
+                    });
+                });
+
+                Promise.all(promises).then(() => {
+                    if (loader) loader.style.display = 'none';
+                    
+                    if (images.length > 1) {
+                        let currentIndex = 0;
+                        images[currentIndex].style.opacity = '1';
+
+                        setInterval(() => {
+                            images[currentIndex].style.opacity = '0';
+                            currentIndex = (currentIndex + 1) % images.length;
+                            images[currentIndex].style.opacity = '1';
+                        }, 3000);
+                    } else if (images.length === 1) {
+                        images[0].style.opacity = '1';
+                    }
+
+                }).catch(error => {
+                    console.error("Error loading images for a portfolio item:", error);
+                    if (loader) loader.style.display = 'none';
+                });
+            });
+
+            // Modal Logic
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            const captionText = document.getElementById("caption");
+            const closeBtn = document.querySelector(".close-btn");
+            const prevBtn = document.querySelector(".prev-btn");
+            const nextBtn = document.querySelector(".next-btn");
+            const modalLoader = document.querySelector('.modal-content .loader');
+
+            let currentImages = [];
+            let currentImageIndex = 0;
+
+            document.querySelectorAll('.view-btn').forEach(button => {
+                button.onclick = function() {
+                    const item = this.closest('.portfolio-item');
+                    const images = item.dataset.images.split(',');
+                    const title = item.dataset.title;
+
+                    currentImages = images;
+                    currentImageIndex = 0;
+                    
+                    modal.style.display = "block";
+                    document.body.classList.add("modal-open");
+                    
+                    updateModalContent(title);
+                }
+            });
+
+            function updateModalContent(title) {
+                modalLoader.style.display = 'block';
+                modalImg.style.opacity = '0';
+                captionText.style.opacity = '0';
+
+                modalImg.src = currentImages[currentImageIndex];
+                
+                modalImg.onload = () => {
+                    modalLoader.style.display = 'none';
+                    modalImg.style.opacity = '1';
+                    captionText.style.opacity = '1';
+                    captionText.innerHTML = `${title} - Image ${currentImageIndex + 1} of ${currentImages.length}`;
+                };
+
+                modalImg.onerror = () => {
+                    console.error("Failed to load modal image:", modalImg.src);
+                    modalLoader.style.display = 'none';
+                    captionText.innerHTML = "Error loading image.";
+                    captionText.style.opacity = '1';
+                }
+            }
+
+            function changeImage(n) {
+                currentImageIndex += n;
+                if (currentImageIndex >= currentImages.length) {
+                    currentImageIndex = 0;
+                }
+                if (currentImageIndex < 0) {
+                    currentImageIndex = currentImages.length - 1;
+                }
+                const title = document.querySelector(`[data-images="${currentImages.join(',')}"]`).dataset.title;
+                updateModalContent(title);
+            }
+            
+            prevBtn.onclick = () => changeImage(-1);
+            nextBtn.onclick = () => changeImage(1);
+
+            function closeModal() {
+                modal.style.display = "none";
+                document.body.classList.remove("modal-open");
+            }
+            
+            closeBtn.onclick = closeModal;
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+
+            // Contact Form Submission Logic
+            const form = document.getElementById('contact-form');
+            const submitButton = document.getElementById('submit-button');
+            const formMessages = document.getElementById('form-messages');
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbz-nl_YhnNpm-RU930xUasXF8O38qiq92ak54ROXY2b7Oj73o2SQyDoaFBl7IF6TvoW/exec'; 
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+                formMessages.style.display = 'none';
+
+                fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result === 'success') {
+                            formMessages.textContent = "Message sent!";
+                            formMessages.className = 'success';
+                            form.reset();
+                        } else {
+                            throw new Error('Form submission failed.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error!', error.message);
+                        formMessages.textContent = 'Oops! Something went wrong. Please try again later.';
+                        formMessages.className = 'error';
+                    })
+                    .finally(() => {
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Launch Collaboration';
+                        formMessages.style.display = 'block';
+                         setTimeout(() => { formMessages.style.display = 'none'; }, 6000);
+                    });
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
+
