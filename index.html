@@ -312,6 +312,26 @@
         h3 a {
             text-decoration: none;
             color: var(--text-primary);
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            position: relative;
+        }
+        h3 a:hover {
+            color: var(--accent-color);
+        }
+        h3 a::after {
+            content: '→';
+            font-weight: 400;
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        h3 a:hover::after {
+            opacity: 1;
+            transform: translateX(0);
         }
         .item-info p {
             font-size: 1rem;
@@ -546,14 +566,20 @@
             margin-top: 1.5rem;
             text-align: center;
             font-size: 1rem;
-            font-weight: bold;
             display: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            line-height: 1.5;
         }
         #form-messages.success {
-            color: #4CAF50;
+            color: #e2e3e5;
+            background-color: #2b3035;
+            border: 1px solid #3c4248;
         }
         #form-messages.error {
-            color: #F44336;
+            color: #f8d7da;
+            background-color: #491c21;
+            border: 1px solid #5a262c;
         }
 
         /* Footer */
@@ -978,23 +1004,23 @@
             form.addEventListener('submit', e => {
                 e.preventDefault();
                 submitButton.disabled = true;
-                submitButton.textContent = 'Sending...';
+                submitButton.textContent = 'Sending email to Project_Cover';
                 formMessages.style.display = 'none';
 
                 fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                     .then(response => response.json())
                     .then(data => {
                         if (data.result === 'success') {
-                            formMessages.textContent = "Message sent successfully!";
+                            formMessages.innerHTML = "<strong>Thank you for your message!</strong><br>We've received it and will get back to you as soon as possible.";
                             formMessages.className = 'success';
                             form.reset();
                         } else {
-                            throw new Error('Form submission API returned an error.');
+                            throw new Error('Project_Cover Mail API returned an error.');
                         }
                     })
                     .catch(error => {
                         console.error('Error!', error.message);
-                        formMessages.textContent = 'Oops! There was a problem. Please try again later.';
+                        formMessages.innerHTML = "<strong>Oops! Something went wrong.</strong><br>We couldn't send your message. Please check your connection and try again.";
                         formMessages.className = 'error';
                     })
                     .finally(() => {
