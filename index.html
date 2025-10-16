@@ -104,7 +104,6 @@
 
         /* Header */
         header {
-            /* padding: 1.5rem 5%; */
             padding: 1rem 5%;
             background-color: rgba(16, 16, 16, 0.8);
             backdrop-filter: blur(10px);
@@ -112,11 +111,10 @@
             width: 100%;
             top: 0;
             z-index: 100;
-            /* border-bottom: 1px solid #2a2a2a; */
         }
         header img{
             opacity: 0.85;
-            transition: opacity 0.2s ease-in-out; /* Smooth fade for slideshow */
+            transition: opacity 0.2s ease-in-out; 
         }
         header img:hover{
             opacity: 1;
@@ -129,7 +127,6 @@
         }
 
         nav h1 {
-            /* font-size: 1.5rem; */
             font-size: 2rem;
             font-weight: 700;
         }
@@ -249,7 +246,6 @@
 
         .portfolio-item:hover {
             transform: translateY(-5px);
-            /* box-shadow: 0 12px 30px rgba(74, 144, 226, 0.2); */
         }
 
         .image-container {
@@ -264,7 +260,7 @@
             padding-top: 133.33%; /* Correct 4:3 aspect ratio for 1200x1600 images */
         }
 
-        .image-container img:not(.watermark) {
+        .image-container img:not(.watermark):not(.image-loader-logo) {
             position: absolute;
             top: 0;
             left: 0;
@@ -278,7 +274,6 @@
         .image-container .watermark {
             position: absolute;
             bottom: 12px;
-            /* left: 50%; */
             left: 1.5rem;
             transform: translateX(-50%);
             height: 1.25rem;
@@ -290,28 +285,20 @@
         }
 
         .portfolio-item:hover .image-container .watermark {
-            /* opacity: 0.9; */
             opacity: 1;
         }
 
-        .loader {
+        .image-loader-logo {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-left-color: var(--accent-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+            height: 3rem;
+            width: auto;
+            animation: pulse 2s infinite ease-in-out;
             z-index: 10;
         }
 
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        
         @keyframes blink-caret { 
             from, to { border-color: transparent } 
             50% { border-color: var(--accent-color); } 
@@ -417,7 +404,6 @@
             height: 1.75rem;
             width: auto;
             z-index: 1002;
-            /* opacity: 0.5; */
             opacity: 1;
             pointer-events: none;
         }
@@ -484,9 +470,7 @@
         /* Contact Form */
         .contact {
             padding: 6rem 5% 4rem;
-            /* background-color: var(--secondary-bg); */
             background-color: var(--primary-bg);
-            
             min-height: calc(100vh - 5rem);
             min-width: 100%;
             display: flex;
@@ -499,7 +483,6 @@
             font-size: 2.5rem;
             margin-bottom: 1rem;
             font-weight: 700;
-
             font-family: var(--font-headings);
         }
         
@@ -546,7 +529,6 @@
         .form-group textarea:focus {
             outline: none;
             border-color: var(--accent-color);
-            /* box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3); */
         }
 
         .form-group textarea {
@@ -633,16 +615,13 @@
         <img src="resources/anurag_gautam-favicon-white.png" alt="Loading..." class="preloader-logo">
     </div>
 
-    <!-- Header -->
     <header>
         <nav>
             <img src="resources/anurag_gautam-favicon-white.png" alt="" style="height: 3rem; width: auto; padding: 0px 15px;">
-            <!-- <h1>Anurag Gautam</h1> -->
         </nav>
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
                 <h2 id="hero-title"></h2>
@@ -650,7 +629,6 @@
             </div>
         </section>
 
-        <!-- About Section -->
         <section class="about">
             <div class="about-content">
                 <h2>A Passion Project</h2>
@@ -661,14 +639,12 @@
         </section>
 
 
-        <!-- Portfolio Gallery -->
         <section class="portfolio">
             <h2 class="portfolio-title">The Collection</h2>
             <div class="portfolio-grid">
-                <!-- Item 1: 11zeros Corrugated -->
                 <div class="portfolio-item" data-title="11zeros - Corrugated" data-images="11zeros-Corrugated_1.jpg,11zeros-Corrugated_2.jpg">
                     <div class="image-container">
-                        <div class="loader"></div>
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Loading..." class="image-loader-logo">
                         <img src="11zeros-Corrugated_1.jpg" alt="11zeros Corrugated Case - View 1">
                         <img src="11zeros-Corrugated_2.jpg" alt="11zeros Corrugated Case - View 2">
                         <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
@@ -685,10 +661,9 @@
                     </div>
                 </div>
 
-                <!-- Item 2: Caseology Nano Pop -->
                 <div class="portfolio-item" data-title="Caseology - Nano Pop" data-images="CASEOLOGY-Nano-Pop_1.jpg,CASEOLOGY-Nano-Pop_2.jpg">
                     <div class="image-container">
-                        <div class="loader"></div>
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Loading..." class="image-loader-logo">
                         <img src="CASEOLOGY-Nano-Pop_1.jpg" alt="Caseology Nano Pop - View 1">
                         <img src="CASEOLOGY-Nano-Pop_2.jpg" alt="Caseology Nano Pop - View 2">
                         <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
@@ -705,10 +680,9 @@
                     </div>
                 </div>
 
-                <!-- Item 3: Spigen Liquid Air -->
                 <div class="portfolio-item" data-title="Spigen - Liquid Air" data-images="Spigen-Liquid-Air_1.jpg,Spigen-LiquidAir_2.jpg">
                     <div class="image-container">
-                        <div class="loader"></div>
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Loading..." class="image-loader-logo">
                         <img src="Spigen-Liquid-Air_1.jpg" alt="Spigen Liquid Air - View 1">
                         <img src="Spigen-LiquidAir_2.jpg" alt="Spigen Liquid Air - View 2">
                         <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
@@ -725,10 +699,9 @@
                     </div>
                 </div>
                 
-                <!-- Item 4: Casesily Carbon Fiber -->
                 <div class="portfolio-item" data-title="Casesily - Carbon Fiber" data-images="Casesily-Carbon-Fiber_1.jpg,Casesily-Carbon-Fiber_2.jpg">
                     <div class="image-container">
-                        <div class="loader"></div>
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Loading..." class="image-loader-logo">
                         <img src="Casesily-Carbon-Fiber_1.jpg" alt="Casesily Carbon Fiber - View 1">
                         <img src="Casesily-Carbon-Fiber_2.jpg" alt="Casesily Carbon Fiber - View 2">
                         <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
@@ -747,7 +720,6 @@
             </div>
         </section>
 
-        <!-- Contact Section -->
         <section class="contact">
             <h2 class="contact-title">Let's Create Together</h2>
             <p class="contact-subtitle">If you believe your product has a story to tell, I'd be honored to help you tell it. Let's start the conversation about our first collaboration.</p>
@@ -774,12 +746,11 @@
         </section>
     </main>
     
-    <!-- Modal / Lightbox -->
     <div id="imageModal" class="modal">
         <span class="close-btn">&times;</span>
         <div class="modal-content">
             <div class="modal-image-wrapper">
-                <div class="loader modal-loader"></div>
+                <img src="resources/anurag_gautam-favicon-white.png" alt="Loading..." class="image-loader-logo modal-loader">
                 <img class="modal-image" id="modalImage">
                 <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="modal-watermark">
             </div>
@@ -794,7 +765,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
         <p>Website by Anurag Gautam</p>
     </footer>
@@ -803,11 +773,30 @@
         document.addEventListener("DOMContentLoaded", () => {
              // --- PRELOADER ---
             const preloader = document.getElementById('preloader');
-            if (preloader) {
-                window.addEventListener('load', () => {
-                    document.body.classList.remove('loading');
-                    preloader.classList.add('loaded');
-                });
+            const heroSection = document.querySelector('.hero');
+
+            const hidePreloader = () => {
+                if (!document.body.classList.contains('loading')) return;
+                document.body.classList.remove('loading');
+                preloader.classList.add('loaded');
+            };
+
+            if (preloader && heroSection) {
+                const heroStyle = window.getComputedStyle(heroSection);
+                const heroBgImage = heroStyle.backgroundImage;
+                
+                // Extract URL from 'url("...")' format
+                const imageUrlMatch = heroBgImage.match(/url\("?(.+?)"?\)/);
+
+                if (imageUrlMatch && imageUrlMatch[1]) {
+                    const img = new Image();
+                    img.src = imageUrlMatch[1];
+                    img.onload = hidePreloader;
+                    img.onerror = hidePreloader; // Hide preloader even if image fails
+                } else {
+                    // Fallback if no background image is found
+                    setTimeout(hidePreloader, 500);
+                }
             }
 
 
@@ -855,12 +844,10 @@
             }
 
             setTimeout(() => {
-                // Initialize subtitle text but keep it hidden
                 heroSubtitleEl.textContent = subtitleText;
-
                 typeEffect(heroTitleEl, titleText, () => {
-                    heroTitleEl.style.marginBottom = "1rem"; // Restore margin
-                    heroSubtitleEl.style.opacity = '1'; // Fade in the static subtitle
+                    heroTitleEl.style.marginBottom = "1rem";
+                    heroSubtitleEl.style.opacity = '1';
                 });
             }, 500);
 
@@ -885,14 +872,13 @@
                 const imageContainer = item.querySelector('.image-container');
                 if (!imageContainer) return;
 
-                const loader = imageContainer.querySelector('.loader');
-                const images = imageContainer.querySelectorAll('img:not(.watermark)'); // Exclude watermark from slideshow
+                const loader = imageContainer.querySelector('.image-loader-logo');
+                const images = imageContainer.querySelectorAll('img:not(.watermark):not(.image-loader-logo)'); 
                 if (images.length === 0) {
                     if(loader) loader.style.display = 'none';
                     return;
                 }
 
-                // Initially hide all images
                 images.forEach(img => img.style.opacity = '0');
 
                 const promises = Array.from(images).map(img => {
@@ -937,7 +923,7 @@
             const closeBtn = document.querySelector(".close-btn");
             const prevBtn = document.getElementById("prevBtnModal");
             const nextBtn = document.getElementById("nextBtnModal");
-            const modalLoader = document.querySelector('.modal-content .loader');
+            const modalLoader = document.querySelector('.modal-content .image-loader-logo');
 
             let currentImages = [];
             let currentImageIndex = 0;
