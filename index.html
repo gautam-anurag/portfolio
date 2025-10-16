@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
-    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <link rel="icon" href="resources/anurag_gautam-favicon-orange.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -52,6 +52,13 @@
             z-index: 100;
             /* border-bottom: 1px solid #2a2a2a; */
         }
+        header img{
+            opacity: 0.85;
+            transition: opacity 0.2s ease-in-out; /* Smooth fade for slideshow */
+        }
+        header img:hover{
+            opacity: 1;
+        }
 
         nav {
             display: flex;
@@ -74,7 +81,7 @@
             text-align: center;
             color: white;
             position: relative;
-            background-image: url('cover-image.jpg');
+            background-image: url('resources/cover-image.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -163,7 +170,7 @@
             padding-top: 133.33%; /* Correct 4:3 aspect ratio for 1200x1600 images */
         }
 
-        .image-container img {
+        .image-container img:not(.watermark) {
             position: absolute;
             top: 0;
             left: 0;
@@ -174,6 +181,25 @@
             transition: opacity 0.8s ease-in-out; /* Smooth fade for slideshow */
         }
         
+        .image-container .watermark {
+            position: absolute;
+            bottom: 12px;
+            /* left: 50%; */
+            left: 1.5rem;
+            transform: translateX(-50%);
+            height: 1.25rem;
+            width: auto;
+            z-index: 5;
+            opacity: 0.6;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .portfolio-item:hover .image-container .watermark {
+            /* opacity: 0.9; */
+            opacity: 1;
+        }
+
         .loader {
             position: absolute;
             top: 50%;
@@ -277,10 +303,30 @@
             to { transform: translateY(-50%); opacity: 1; }
         }
 
+        .modal-image-wrapper {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            line-height: 0;
+        }
+
         .modal-image {
             width: 100%;
             border-radius: 8px;
             transition: opacity 0.4s ease;
+        }
+
+        .modal-watermark {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 1.75rem;
+            width: auto;
+            z-index: 1002;
+            /* opacity: 0.5; */
+            opacity: 1;
+            pointer-events: none;
         }
 
         .close-btn, .prev-btn, .next-btn {
@@ -478,7 +524,8 @@
     <!-- Header -->
     <header>
         <nav>
-            <h1>Anurag Gautam</h1>
+            <img src="resources/anurag_gautam-favicon-white.png" alt="" style="height: 3rem; width: auto; padding: 0px 15px;">
+            <!-- <h1>Anurag Gautam</h1> -->
         </nav>
     </header>
 
@@ -505,6 +552,7 @@
                         <div class="loader"></div>
                         <img src="11zeros-Corrugated_1.jpg" alt="11zeros Corrugated Case - View 1">
                         <img src="11zeros-Corrugated_2.jpg" alt="11zeros Corrugated Case - View 2">
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
                     </div>
                     <div class="item-info">
                         <h3>
@@ -524,6 +572,7 @@
                         <div class="loader"></div>
                         <img src="CASEOLOGY-Nano-Pop_1.jpg" alt="Caseology Nano Pop - View 1">
                         <img src="CASEOLOGY-Nano-Pop_2.jpg" alt="Caseology Nano Pop - View 2">
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
                     </div>
                     <div class="item-info">
                         <h3>
@@ -543,6 +592,7 @@
                         <div class="loader"></div>
                         <img src="Spigen-Liquid-Air_1.jpg" alt="Spigen Liquid Air - View 1">
                         <img src="Spigen-LiquidAir_2.jpg" alt="Spigen Liquid Air - View 2">
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
                     </div>
                     <div class="item-info">
                         <h3>
@@ -562,6 +612,7 @@
                         <div class="loader"></div>
                         <img src="Casesily-Carbon-Fiber_1.jpg" alt="Casesily Carbon Fiber - View 1">
                         <img src="Casesily-Carbon-Fiber_2.jpg" alt="Casesily Carbon Fiber - View 2">
+                        <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="watermark">
                     </div>
                     <div class="item-info">
                         <h3>
@@ -610,8 +661,11 @@
         <span class="prev-btn">&#10094;</span>
         <span class="next-btn">&#10095;</span>
         <div class="modal-content">
-            <div class="loader modal-loader"></div>
-            <img class="modal-image" id="modalImage">
+            <div class="modal-image-wrapper">
+                <div class="loader modal-loader"></div>
+                <img class="modal-image" id="modalImage">
+                <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="modal-watermark">
+            </div>
             <div id="caption"></div>
         </div>
     </div>
@@ -644,7 +698,7 @@
                 if (!imageContainer) return;
 
                 const loader = imageContainer.querySelector('.loader');
-                const images = imageContainer.querySelectorAll('img');
+                const images = imageContainer.querySelectorAll('img:not(.watermark)'); // Exclude watermark from slideshow
                 if (images.length === 0) {
                     if(loader) loader.style.display = 'none';
                     return;
@@ -804,3 +858,4 @@
 
 </body>
 </html>
+
