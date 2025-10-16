@@ -16,6 +16,8 @@
             --text-primary: #f0f0f0;
             --text-secondary: #a0a0a0;
             --accent-color: #FF6600; /* Orange Accent */
+            --font-main: 'Inter', sans-serif;
+            --font-headings: 'Lora', serif;
         }
 
         /* Custom Selection Styling */
@@ -26,6 +28,21 @@
         ::selection {
             color: var(--accent-color);
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-bg);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #2a2a2a;
         }
 
         * {
@@ -46,8 +63,38 @@
             overflow-x: hidden;
         }
 
-        body.modal-open {
+        body.modal-open, body.loading {
             overflow: hidden;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-bg);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.75s ease, visibility 0.75s ease;
+        }
+        #preloader.loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .preloader-logo {
+            height: 4rem;
+            width: auto;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
         }
         
         /* Prevent Image Download */
@@ -374,49 +421,64 @@
             opacity: 1;
             pointer-events: none;
         }
-
-        .close-btn, .prev-btn, .next-btn {
+        
+        .close-btn {
             cursor: pointer;
             position: absolute;
             color: white;
             font-weight: bold;
             transition: 0.3s ease;
             user-select: none;
-        }
-
-        .close-btn {
             top: 15px;
             right: 35px;
             font-size: 40px;
             z-index: 1001;
         }
 
-        .prev-btn, .next-btn {
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 24px;
-            padding: 16px;
-            background-color: rgba(0,0,0,0.4);
-            border-radius: 0 3px 3px 0;
+        .modal-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0.5rem 0.5rem;
         }
 
-        .prev-btn {
-            left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-
-        .next-btn {
-            right: 0;
-            border-radius: 3px 0 0 3px;
+        .modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         
-        #caption {
-            text-align: center;
+        .modal-controls button {
+            background: none;
+            border: 2px solid var(--text-secondary);
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-controls button:hover {
             color: var(--text-primary);
-            padding-top: 1rem;
-            font-size: 1.1rem;
-            font-weight: 300;
-            transition: opacity 0.4s ease;
+            border-color: var(--text-primary);
+        }
+
+        #image-counter {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            min-width: 45px;
+            text-align: center;
+        }
+
+        #caption {
+            font-size: 1.5rem;
+            text-align: left;
+            font-weight: 700;
         }
         
         /* Contact Form */
@@ -437,6 +499,8 @@
             font-size: 2.5rem;
             margin-bottom: 1rem;
             font-weight: 700;
+
+            font-family: var(--font-headings);
         }
         
         .contact-subtitle {
@@ -448,8 +512,9 @@
         }
 
         .contact-form {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .form-group {
@@ -461,6 +526,7 @@
             margin-bottom: 0.5rem;
             font-weight: 700;
             color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
         }
 
         .form-group input,
@@ -469,7 +535,7 @@
             padding: 0.8rem 1rem;
             border-radius: 8px;
             border: 1px solid #333;
-            background-color: #101010;
+            background-color: #1a1a1a;
             color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
@@ -552,10 +618,6 @@
             .hero-content h2 {
                 font-size: 3rem;
             }
-            .prev-btn, .next-btn {
-                padding: 14px 10px;
-                font-size: 28px;
-            }
             .close-btn {
                 font-size: 45px;
                 top: 5px;
@@ -565,7 +627,11 @@
 
     </style>
 </head>
-<body>
+<body class="loading">
+
+    <div id="preloader">
+        <img src="resources/anurag_gautam-favicon-white.png" alt="Loading..." class="preloader-logo">
+    </div>
 
     <!-- Header -->
     <header>
@@ -590,14 +656,14 @@
                 <h2>A Passion Project</h2>
                 <p>This collection isn't just a portfolio; it's the start of a journey. As a photography enthusiast with a keen eye for product design, I've always admired brands that merge form and function seamlessly. I personally purchased and photographed each case in this collection to capture the unique story each one tells—from its texture and color to the precise way it complements the device it protects.</p>
                 <p>This project was born from a genuine appreciation for great design and a desire to bring products to life through the lens. It represents my first step into professional collaboration, driven by passion and a commitment to quality. I believe the best partnerships come from a place of mutual respect for the craft, and I'm excited to see where this path leads.</p>
+                <p>This inaugural collection focuses on the Samsung Galaxy S23 Ultra, with the S25 Ultra series coming next.</p>
             </div>
         </section>
 
 
         <!-- Portfolio Gallery -->
         <section class="portfolio">
-            <!-- <h2 class="portfolio-title">The Collection</h2> -->
-            <h2 class="portfolio-title">Portfolio</h2>
+            <h2 class="portfolio-title">The Collection</h2>
             <div class="portfolio-grid">
                 <!-- Item 1: 11zeros Corrugated -->
                 <div class="portfolio-item" data-title="11zeros - Corrugated" data-images="11zeros-Corrugated_1.jpg,11zeros-Corrugated_2.jpg">
@@ -687,19 +753,19 @@
             <p class="contact-subtitle">If you believe your product has a story to tell, I'd be honored to help you tell it. Let's start the conversation about our first collaboration.</p>
             <form class="contact-form" id="contact-form">
                 <div class="form-group">
-                    <label for="brand-name">Your Brand's Name (The one the legends speak of)</label>
+                    <label for="brand-name">Your Brand's Name</label>
                     <input type="text" id="brand-name" name="brandName" required>
                 </div>
                 <div class="form-group">
-                    <label for="contact-name">Your Name (The Hero behind the Brand)</label>
+                    <label for="contact-name">Your Name</label>
                     <input type="text" id="contact-name" name="contactName" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Your Email (For top-secret communications)</label>
+                    <label for="email">Your Email</label>
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="project-details">Your Grand Plan (Tell me about the case that will change the world)</label>
+                    <label for="project-details">Tell me about your project</label>
                     <textarea id="project-details" name="projectDetails" required></textarea>
                 </div>
                 <button type="submit" class="submit-btn" id="submit-button">Let's Collaborate</button>
@@ -711,15 +777,20 @@
     <!-- Modal / Lightbox -->
     <div id="imageModal" class="modal">
         <span class="close-btn">&times;</span>
-        <span class="prev-btn">&#10094;</span>
-        <span class="next-btn">&#10095;</span>
         <div class="modal-content">
             <div class="modal-image-wrapper">
                 <div class="loader modal-loader"></div>
                 <img class="modal-image" id="modalImage">
                 <img src="resources/anurag_gautam-favicon-white.png" alt="Watermark" class="modal-watermark">
             </div>
-            <div id="caption"></div>
+            <div class="modal-info-bar">
+                <h3 id="caption"></h3>
+                <div class="modal-controls">
+                    <button id="prevBtnModal">&#10094;</button>
+                    <span id="image-counter"></span>
+                    <button id="nextBtnModal">&#10095;</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -730,6 +801,16 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+             // --- PRELOADER ---
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                window.addEventListener('load', () => {
+                    document.body.classList.remove('loading');
+                    preloader.classList.add('loaded');
+                });
+            }
+
+
             // Prevent image download
             document.querySelectorAll('img').forEach(img => {
                 img.addEventListener('contextmenu', e => e.preventDefault());
@@ -851,13 +932,17 @@
             const modal = document.getElementById("imageModal");
             const modalImg = document.getElementById("modalImage");
             const captionText = document.getElementById("caption");
+            const imageCounter = document.getElementById("image-counter");
+            const modalImageWrapper = document.querySelector('.modal-image-wrapper');
             const closeBtn = document.querySelector(".close-btn");
-            const prevBtn = document.querySelector(".prev-btn");
-            const nextBtn = document.querySelector(".next-btn");
+            const prevBtn = document.getElementById("prevBtnModal");
+            const nextBtn = document.getElementById("nextBtnModal");
             const modalLoader = document.querySelector('.modal-content .loader');
 
             let currentImages = [];
             let currentImageIndex = 0;
+            let touchstartX = 0;
+            let touchendX = 0;
 
             document.querySelectorAll('.view-btn').forEach(button => {
                 button.onclick = function() {
@@ -886,7 +971,8 @@
                     modalLoader.style.display = 'none';
                     modalImg.style.opacity = '1';
                     captionText.style.opacity = '1';
-                    captionText.innerHTML = `${title} - Image ${currentImageIndex + 1} of ${currentImages.length}`;
+                    captionText.innerHTML = `${title}`;
+                    imageCounter.innerHTML = `${currentImageIndex + 1} / ${currentImages.length}`;
                 };
 
                 modalImg.onerror = () => {
@@ -908,6 +994,25 @@
                 const title = document.querySelector(`[data-images="${currentImages.join(',')}"]`).dataset.title;
                 updateModalContent(title);
             }
+
+            function handleSwipe() {
+                if (touchendX < touchstartX - 50) {
+                    changeImage(1);
+                }
+                if (touchendX > touchstartX + 50) {
+                    changeImage(-1);
+                }
+            }
+
+            modalImageWrapper.addEventListener('touchstart', e => {
+                touchstartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            modalImageWrapper.addEventListener('touchend', e => {
+                touchendX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
             
             prevBtn.onclick = () => changeImage(-1);
             nextBtn.onclick = () => changeImage(1);
@@ -965,4 +1070,3 @@
 
 </body>
 </html>
-
