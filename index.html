@@ -56,6 +56,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         html {
             scroll-behavior: smooth;
@@ -606,6 +607,10 @@
             header {
                 padding: 8px 5%;
             }
+            /* Fix for hero background zoom on mobile scroll */
+            .hero {
+                background-attachment: scroll;
+            }
             .hero-content h2 {
                 font-size: 3rem;
             }
@@ -613,12 +618,6 @@
                 font-size: 45px;
                 top: 5px;
                 right: 15px;
-            }
-            .hero {
-                height: 80vh;
-                background-size: auto calc(100% - 400px);
-                background-attachment: fixed;
-                background-repeat: no-repeat;
             }
         }
     </style>
