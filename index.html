@@ -15,7 +15,17 @@
             --secondary-bg: #1e1e1e;
             --text-primary: #f0f0f0;
             --text-secondary: #a0a0a0;
-            --accent-color: #4a90e2;
+            --accent-color: #FF6600; /* Orange Accent */
+        }
+
+        /* Custom Selection Styling */
+        ::-moz-selection { /* Code for Firefox */
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::selection {
+            color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -38,6 +48,11 @@
 
         body.modal-open {
             overflow: hidden;
+        }
+        
+        /* Prevent Image Download */
+        img {
+            pointer-events: none;
         }
 
         /* Header */
@@ -107,13 +122,45 @@
             font-size: 3.5rem;
             margin-bottom: 1rem;
             font-weight: 700;
+            display: inline-block; /* For typing effect */
         }
 
         .hero-content p {
             font-size: 1.25rem;
             font-weight: 300;
             color: var(--text-secondary);
+            opacity: 0; /* Initially hidden for fade-in */
+            transition: opacity 1.5s ease;
         }
+
+        /* About Section */
+        .about {
+            padding: 6rem 5%;
+            background-color: #0c0c0c;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .about h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+        .about p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .about p:not(:last-child) {
+            margin-bottom: 1.5rem;
+        }
+
 
         /* Portfolio Gallery */
         .portfolio {
@@ -217,6 +264,11 @@
         @keyframes spin {
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
+        
+        @keyframes blink-caret { 
+            from, to { border-color: transparent } 
+            50% { border-color: var(--accent-color); } 
+        }
 
         .item-info {
             padding: 1.5rem;
@@ -258,12 +310,6 @@
             justify-content: center;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .view-btn:hover {
-            background-color: var(--accent-color);
-            color: white;
-            /* transform: scale(1.02); */
         }
 
         /* Modal / Lightbox */
@@ -364,10 +410,6 @@
             border-radius: 3px 0 0 3px;
         }
         
-        .prev-btn:hover, .next-btn:hover, .close-btn:hover {
-            color: var(--text-secondary);
-        }
-
         #caption {
             text-align: center;
             color: var(--text-primary);
@@ -459,11 +501,6 @@
             width: 100%;
         }
 
-        .submit-btn:hover:not(:disabled) {
-            background-color: #3a80d2;
-            /* transform: scale(1.02); */
-        }
-
         .submit-btn:disabled {
             background-color: #555;
             cursor: not-allowed;
@@ -533,13 +570,20 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <!-- <h2>Capturing the Details</h2> -->
-                <h2>Project_Cover</h2>
-                <!-- <p>Ready for brand collaborations.</p> -->
-                <!-- <p>Portfolio for brand collaborations.</p> -->
-                <p>Capturing the Details</p>
+                <h2 id="hero-title"></h2>
+                <p id="hero-subtitle"></p>
             </div>
         </section>
+
+        <!-- About Section -->
+        <section class="about">
+            <div class="about-content">
+                <h2>A Passion Project</h2>
+                <p>This collection isn't just a portfolio; it's the start of a journey. As a photography enthusiast with a keen eye for product design, I've always admired brands that merge form and function seamlessly. I personally purchased and photographed each case in this collection to capture the unique story each one tells—from its texture and color to the precise way it complements the device it protects.</p>
+                <p>This project was born from a genuine appreciation for great design and a desire to bring products to life through the lens. It represents my first step into professional collaboration, driven by passion and a commitment to quality. I believe the best partnerships come from a place of mutual respect for the craft, and I'm excited to see where this path leads.</p>
+            </div>
+        </section>
+
 
         <!-- Portfolio Gallery -->
         <section class="portfolio">
@@ -630,8 +674,8 @@
 
         <!-- Contact Section -->
         <section class="contact">
-            <h2 class="contact-title">Let's Collaborate</h2>
-            <p class="contact-subtitle">Got a case that needs its superhero moment? Drop a line. My camera is ready for its close-up, even if your case is shy.</p>
+            <h2 class="contact-title">Let's Create Together</h2>
+            <p class="contact-subtitle">If you believe your product has a story to tell, I'd be honored to help you tell it. Let's start the conversation about our first collaboration.</p>
             <form class="contact-form" id="contact-form">
                 <div class="form-group">
                     <label for="brand-name">Your Brand's Name (The one the legends speak of)</label>
@@ -677,6 +721,60 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // Prevent image download
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('contextmenu', e => e.preventDefault());
+            });
+
+            // Hero Text Typing Effect
+            const heroTitleEl = document.getElementById('hero-title');
+            const heroSubtitleEl = document.getElementById('hero-subtitle');
+            const titleText = "Project_Cover";
+            const subtitleText = "Capturing the Details";
+
+            function typeEffect(element, text, callback) {
+                let i = 0;
+                element.innerHTML = ""; 
+                element.style.borderRight = '3px solid var(--accent-color)';
+                element.style.paddingRight = '5px';
+                element.style.animation = 'blink-caret .75s step-end infinite';
+                element.style.whiteSpace = 'nowrap';
+                element.style.overflow = 'hidden';
+
+
+                function type() {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, 120);
+                    } else {
+                        if (callback) {
+                             setTimeout(() => {
+                                element.style.animation = 'none';
+                                element.style.borderRight = 'transparent';
+                                callback();
+                             }, 1000); 
+                        } else {
+                            setTimeout(() => {
+                                element.style.animation = 'blink-caret .75s step-end infinite';
+                            }, 500);
+                        }
+                    }
+                }
+                type();
+            }
+
+            setTimeout(() => {
+                // Initialize subtitle text but keep it hidden
+                heroSubtitleEl.textContent = subtitleText;
+
+                typeEffect(heroTitleEl, titleText, () => {
+                    heroTitleEl.style.marginBottom = "1rem"; // Restore margin
+                    heroSubtitleEl.style.opacity = '1'; // Fade in the static subtitle
+                });
+            }, 500);
+
+
             // Intersection Observer for fade-in
             const portfolioItems = document.querySelectorAll('.portfolio-item');
             const observer = new IntersectionObserver((entries) => {
@@ -858,4 +956,6 @@
 
 </body>
 </html>
+
+
 
